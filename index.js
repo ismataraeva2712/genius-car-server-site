@@ -11,19 +11,19 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
-function verifyJwt(req,res,next){
-    const authHeader=req.headers.authorization 
-    if(!authHeader){
-        return res.status(401).send({message:'unauthorizes access'})
+function verifyJwt(req, res, next) {
+    const authHeader = req.headers.authorization
+    if (!authHeader) {
+        return res.status(401).send({ message: 'unauthorizes access' })
     }
-    const token=authHeader.split(' ')[1]
-    jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,(err,decoded)=>{
-        if(err){
-            return res.status(403).send({message:'forbidden access'})
-            console.log('decoded',decoded)
+    const token = authHeader.split(' ')[1]
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(403).send({ message: 'forbidden access' })
+            console.log('decoded', decoded)
         }
     })
-   
+
     next()
 }
 
@@ -80,8 +80,8 @@ async function run() {
             res.send(result)
         })
         // order collection Api 
-        app.get('/order',verifyJwt, async (req, res) => {
-            
+        app.get('/order', verifyJwt, async (req, res) => {
+
             const email = req.query.email;
             console.log(email)
             const query = { email: email }
@@ -105,6 +105,9 @@ run().catch(console.dir)
 // ========================================================
 app.get('/', (req, res) => {
     res.send('running genius server')
+})
+app.get('/hero', (req, res) => {
+    res.send('running hero')
 })
 // ==================================================
 app.listen(port, () => {
